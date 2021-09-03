@@ -74,13 +74,13 @@ jobs:
             ${{ env.img }} \
             bash -exc '${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
-            pip install --upgrade pip
-            pip install -e .
-            pip install -r requirements.txt
-            pytest tests
-            pip install twine wheel
-            pip wheel -w dist --no-deps .
-            twine upload dist/*
+            pip install --upgrade pip && \
+            pip install -e . && \
+            pip install -r requirements.txt && \
+            pytest tests && \
+            pip install twine wheel && \
+            pip wheel -w dist --no-deps . && \
+            twine upload dist/* && \
             deactivate'
   manylinux_sdist:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
