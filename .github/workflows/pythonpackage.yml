@@ -80,13 +80,12 @@ jobs:
             pytest tests && \
             pip install wheel && \
             pip wheel -w dist --no-deps . && \
-            auditwheel repair . -w dist && \
             deactivate'
     - name: Publish
-      #if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        #TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
         pip install twine
         twine upload dist/*
