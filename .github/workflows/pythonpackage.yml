@@ -80,7 +80,7 @@ jobs:
             pytest tests && \
             pip install wheel && \
             pip wheel -w dist --no-deps . && \
-            auditwheel repair -w dist/* && \
+            auditwheel repair . -w dist && \
             deactivate'
     - name: Publish
       #if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
