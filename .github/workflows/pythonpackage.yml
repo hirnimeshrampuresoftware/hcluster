@@ -78,7 +78,7 @@ jobs:
             pip install -e . && \
             pip install -r requirements.txt && \
             pytest tests && \
-            pip install twine wheel && \
+            pip install wheel && \
             pip wheel -w dist --no-deps . && \
             deactivate'
     - name: Publish
@@ -89,6 +89,7 @@ jobs:
       run: |
         cd dist
         ls
+        pip install twine
         twine upload dist/*
 
   manylinux_sdist:
