@@ -68,7 +68,7 @@ jobs:
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
-    - name: Install dependencies
+    - name: Build Wheel
       run: |
             docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
@@ -80,8 +80,17 @@ jobs:
             pytest tests && \
             pip install twine wheel && \
             pip wheel -w dist --no-deps . && \
-            twine upload dist/* && \
             deactivate'
+    - name: Publish
+      #if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        #TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        cd dist
+        ls
+        twine upload dist/*
+
   manylinux_sdist:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
     needs: test
